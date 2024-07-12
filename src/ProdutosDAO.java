@@ -52,16 +52,16 @@ public class ProdutosDAO {
         try {
         String sqlFiltro = "select * from produtos";
              
-             PreparedStatement st = conn.prepareStatement(sqlFiltro);
+             prep = conn.prepareStatement(sqlFiltro);
              
-             ResultSet rs = st.executeQuery();
+             ResultSet resultset = prep.executeQuery();
              
-             while (rs.next()) {
+             while (resultset.next()) {
                  ProdutosDTO produtoEncontrado = new ProdutosDTO();
-                 produtoEncontrado.setId(rs.getInt("id"));
-                 produtoEncontrado.setNome(rs.getString("nome"));
-                 produtoEncontrado.setValor(rs.getInt("valor"));
-                 produtoEncontrado.setStatus(rs.getString("status"));
+                 produtoEncontrado.setId(resultset.getInt("id"));
+                 produtoEncontrado.setNome(resultset.getString("nome"));
+                 produtoEncontrado.setValor(resultset.getInt("valor"));
+                 produtoEncontrado.setStatus(resultset.getString("status"));
                  listagem.add(produtoEncontrado);
              }
              
@@ -84,7 +84,31 @@ public class ProdutosDAO {
     { e.printStackTrace(); } 
 }
     
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
     
+        conn = new conectaDAO().connectDB();
+        
+    try {
+        String query = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        prep = conn.prepareStatement(query);
+        resultset = prep.executeQuery();
+        
+        while(resultset.next()) {
+            int id = resultset.getInt("id");
+            String nome = resultset.getString("nome");
+            int valor = resultset.getInt("valor");
+            String status = resultset.getString("status");
+            
+            ProdutoDTO produto = new ProdutoDTO(id, nome, valor, status);
+            produtos.add(produto);
+        }
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return produtos;
+}
         
 }
 
