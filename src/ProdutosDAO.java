@@ -52,16 +52,16 @@ public class ProdutosDAO {
         try {
         String sqlFiltro = "select * from produtos";
              
-             PreparedStatement st = conn.prepareStatement(sqlFiltro);
+             prep = conn.prepareStatement(sqlFiltro);
              
-             ResultSet rs = st.executeQuery();
+             resultset = prep.executeQuery();
              
-             while (rs.next()) {
+             while (resultset.next()) {
                  ProdutosDTO produtoEncontrado = new ProdutosDTO();
-                 produtoEncontrado.setId(rs.getInt("id"));
-                 produtoEncontrado.setNome(rs.getString("nome"));
-                 produtoEncontrado.setValor(rs.getInt("valor"));
-                 produtoEncontrado.setStatus(rs.getString("status"));
+                 produtoEncontrado.setId(resultset.getInt("id"));
+                 produtoEncontrado.setNome(resultset.getString("nome"));
+                 produtoEncontrado.setValor(resultset.getInt("valor"));
+                 produtoEncontrado.setStatus(resultset.getString("status"));
                  listagem.add(produtoEncontrado);
              }
              
@@ -73,8 +73,42 @@ public class ProdutosDAO {
         
     }
     
+    public void venderProduto(Integer id) {
+    conn = new conectaDAO().connectDB();
     
-    
-        
+    try { 
+        String query = "UPDATE produtos SET status = 'Vendido' WHERE id = ?"; 
+        prep = conn.prepareStatement(query);
+        prep.setInt(1, id); prep.executeUpdate(); 
+    } catch (SQLException e) 
+    { e.printStackTrace(); } 
 }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+    
+        conn = new conectaDAO().connectDB();
+        
+    try {
+        String query = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        prep = conn.prepareStatement(query);
+             
+             resultset = prep.executeQuery();
+             
+             while (resultset.next()) {
+                 ProdutosDTO produtoEncontrado = new ProdutosDTO();
+                 produtoEncontrado.setId(resultset.getInt("id"));
+                 produtoEncontrado.setNome(resultset.getString("nome"));
+                 produtoEncontrado.setValor(resultset.getInt("valor"));
+                 produtoEncontrado.setStatus(resultset.getString("status"));
+                 listagem.add(produtoEncontrado);
+             }
+             
+             return listagem;
+         } catch (SQLException ex) {
+             System.out.println("Erro ao conectar: " + ex.getMessage());
+            return null;
+         }
+    }
+}
+        
 
