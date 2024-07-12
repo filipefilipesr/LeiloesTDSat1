@@ -73,6 +73,16 @@ public class ProdutosDAO {
         
     }
     
+    public void venderProduto(Integer id) {
+    conn = new conectaDAO().connectDB();
+    
+    try { 
+        String query = "UPDATE produtos SET status = 'Vendido' WHERE id = ?"; 
+        prep = conn.prepareStatement(query);
+        prep.setInt(1, id); prep.executeUpdate(); 
+    } catch (SQLException e) 
+    { e.printStackTrace(); } 
+}
     
     
         
