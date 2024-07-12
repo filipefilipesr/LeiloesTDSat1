@@ -54,7 +54,7 @@ public class ProdutosDAO {
              
              prep = conn.prepareStatement(sqlFiltro);
              
-             ResultSet resultset = prep.executeQuery();
+             resultset = prep.executeQuery();
              
              while (resultset.next()) {
                  ProdutosDTO produtoEncontrado = new ProdutosDTO();
@@ -91,24 +91,24 @@ public class ProdutosDAO {
     try {
         String query = "SELECT * FROM produtos WHERE status = 'Vendido'";
         prep = conn.prepareStatement(query);
-        resultset = prep.executeQuery();
-        
-        while(resultset.next()) {
-            int id = resultset.getInt("id");
-            String nome = resultset.getString("nome");
-            int valor = resultset.getInt("valor");
-            String status = resultset.getString("status");
-            
-            ProdutoDTO produto = new ProdutoDTO(id, nome, valor, status);
-            produtos.add(produto);
-        }
-        
-    } catch (SQLException e) {
-        e.printStackTrace();
+             
+             resultset = prep.executeQuery();
+             
+             while (resultset.next()) {
+                 ProdutosDTO produtoEncontrado = new ProdutosDTO();
+                 produtoEncontrado.setId(resultset.getInt("id"));
+                 produtoEncontrado.setNome(resultset.getString("nome"));
+                 produtoEncontrado.setValor(resultset.getInt("valor"));
+                 produtoEncontrado.setStatus(resultset.getString("status"));
+                 listagem.add(produtoEncontrado);
+             }
+             
+             return listagem;
+         } catch (SQLException ex) {
+             System.out.println("Erro ao conectar: " + ex.getMessage());
+            return null;
+         }
     }
-    
-    return produtos;
 }
         
-}
 
